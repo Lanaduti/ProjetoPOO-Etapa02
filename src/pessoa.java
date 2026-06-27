@@ -12,17 +12,14 @@ public abstract class Pessoa {
         this.dataNascimento = "";
     }
 
-    public Pessoa(String nome, String cpf,
-                  String telefone,
-                  String dataNascimento) {
-
+    public Pessoa(String nome, String cpf, String telefone, String dataNascimento) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.dataNascimento = dataNascimento;
     }
 
-     public String getNome() {
+    public String getNome() {
         return nome;
     }
 
@@ -59,3 +56,6 @@ public abstract class Pessoa {
     }
 
     public abstract void exibirResumo();
+} // Chave que faltava fechar aqui no final!
+
+
