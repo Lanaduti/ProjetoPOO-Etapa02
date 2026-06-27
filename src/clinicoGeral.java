@@ -1,18 +1,15 @@
 public class ClinicoGeral extends Profissional {
     private String crmRegional;
 
-    public ClinicoGeral(String nome, String cpf, String telefone, String dataNascimento, 
-                        String registro, double valor, String crmRegional) {
-        super(nome, cpf, telefone, dataNascimento, registro, valor);
+    public ClinicoGeral(String nome, String registroProfissional, double valorConsulta, String crmRegional) {
+        // Passa os dados certos para o construtor da classe do professor
+        super(nome, "clinica geral", registroProfissional, valorConsulta);
         this.crmRegional = crmRegional;
     }
 
     @Override
-    public void exibirResumo() {
-        System.out.println("--- Clínico Geral ---");
-        System.out.println("Nome: " + getNome());
-        System.out.println("Registro: " + getRegistroProfissional());
-        System.out.println("CRM Regional: " + this.crmRegional);
-        System.out.println("Valor: R$" + getValorConsulta());
+    public String exibirResumo() {
+        // Usa o resumo do professor e adiciona o CRM Regional do Clínico Geral
+        return super.exibirResumo() + " | CRM Regional: " + this.crmRegional;
     }
 }
