@@ -20,23 +20,20 @@ public class Paciente extends Pessoa {
     }
     }
 
-    // construtor com todos os dados
-    public Paciente(String nome, String cpf, int idade, String telefone, String convenioNome) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
-        this.telefone = telefone;
-        this.convenioNome = convenioNome;
-        this.ativo = true;
-    }
+    public int getIdade() { return idade; }
+    public void setIdade(int idade) { this.idade = idade; }
 
-    // atualiza so idade e telefone
+    public String getConvenioNome() { return convenioNome; }
+    public void setConvenioNome(String convenioNome) { this.convenioNome = convenioNome; }
+
+    public boolean isAtivo() { return ativo; }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+
     public void complementar(int idade, String telefone) {
         this.idade = idade;
         this.telefone = telefone;
     }
 
-    // atualiza tudo incluindo convenio
     public void complementar(int idade, String telefone, String convenioNome) {
         this.idade = idade;
         this.telefone = telefone;
@@ -47,13 +44,11 @@ public class Paciente extends Pessoa {
         this.ativo = false;
     }
 
+    @Override
     public String exibirResumo() {
-        String status = "Sim";
-        if (!ativo) {
-            status = "Nao";
-        }
-        return "Nome: " + nome + " | CPF: " + cpf + " | Idade: " + idade
-                + " | Tel: " + telefone + " | Convenio: " + convenioNome
+        String status = ativo ? "Sim" : "Nao";
+        return super.exibirResumo() + " | Idade: " + idade
+                + " | Convenio: " + convenioNome
                 + " | Ativo: " + status;
     }
 }
