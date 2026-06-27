@@ -38,17 +38,23 @@ public class Profissional extends Pessoa {
         }
     }
 
+    public String getEspecialidade() { return especialidade; }
+    public String getRegistroProfissional() { return registroProfissional; }
+    public double getValorConsulta() { return valorConsulta; }
+
     public void atualizar(String registro, double valor) {
         this.registroProfissional = registro;
         this.valorConsulta = valor;
     }
 
-    public void atualizar(String registro, double valor, String[] dias, int totalDias) {
+     public void atualizar(String registro, double valor, String[] dias, int totalDias) {
         this.registroProfissional = registro;
         this.valorConsulta = valor;
         this.totalDias = totalDias;
         for (int i = 0; i < totalDias; i++) {
             this.diasDisponiveis[i] = dias[i];
+        }
+    }
         }
     }
 
@@ -60,7 +66,6 @@ public class Profissional extends Pessoa {
             }
         }
         return false;
-    }
 
     // valida as especialidades aceitas pela clinica
     public static boolean especialidadeValida(String esp) {
@@ -71,7 +76,7 @@ public class Profissional extends Pessoa {
         return false;
     }
 
-    public String exibirResumo() {
+     public String exibirResumo() {
         String dias = "";
         for (int i = 0; i < totalDias; i++) {
             if (i > 0) dias = dias + ", ";
