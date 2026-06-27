@@ -1,31 +1,31 @@
 public class Relatorio {
 
     // mostra todas as consultas
-    public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
+        public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
                                       Atendimento[] atendimentos, int totalAtendimentos) {
         System.out.println("\n=== RELATORIO GERAL ===");
         for (int i = 0; i < totalConsultas; i++) {
             System.out.println(consultas[i].exibirResumo());
             // verifica se tem diagnostico
-            String diag = buscarDiagnostico(i, atendimentos, totalAtendimentos);
-            if (!diag.equals("")) {
+           String diag = buscarDiagnostico(i, atendimentos, totalAtendimentos);
+            if (!diag.isEmpty()) { // .isEmpty() é uma forma mais limpa de verificar ""
                 System.out.println("  Diagnostico: " + diag);
             }
             System.out.println("---");
         }
     }
-
     // filtra por profissional
-    public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
+      public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
                                       Atendimento[] atendimentos, int totalAtendimentos,
                                       String nomeProfissional) {
         System.out.println("\n=== RELATORIO - " + nomeProfissional + " ===");
         boolean achou = false;
         for (int i = 0; i < totalConsultas; i++) {
-            if (consultas[i].nomeProfissional.equals(nomeProfissional)) {
+            // AQUI usamos o getter em vez de acessar .nomeProfissional diretamente
+            if (consultas[i].getNomeProfissional().equals(nomeProfissional)) {
                 System.out.println(consultas[i].exibirResumo());
                 String diag = buscarDiagnostico(i, atendimentos, totalAtendimentos);
-                if (!diag.equals("")) {
+                if (!diag.isEmpty()) {
                     System.out.println("  Diagnostico: " + diag);
                 }
                 System.out.println("---");
@@ -38,15 +38,16 @@ public class Relatorio {
     }
 
     // filtra por periodo (data inicio e fim)
-    public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
+     public static void gerarRelatorio(Consulta[] consultas, int totalConsultas,
                                       Atendimento[] atendimentos, int totalAtendimentos,
                                       String dataInicio, String dataFim) {
         System.out.println("\n=== RELATORIO - " + dataInicio + " a " + dataFim + " ===");
         for (int i = 0; i < totalConsultas; i++) {
-            if (estaNoIntervalo(consultas[i].data, dataInicio, dataFim)) {
+            // AQUI usamos o getter .getData()
+            if (estaNoIntervalo(consultas[i].getData(), dataInicio, dataFim)) {
                 System.out.println(consultas[i].exibirResumo());
                 String diag = buscarDiagnostico(i, atendimentos, totalAtendimentos);
-                if (!diag.equals("")) {
+                if (!diag.isEmpty()) {
                     System.out.println("  Diagnostico: " + diag);
                 }
                 System.out.println("---");
@@ -55,7 +56,7 @@ public class Relatorio {
     }
 
     // resumo financeiro do dia
-    public static void gerarResumoFinanceiro(Consulta[] consultas, int totalConsultas,
+   public static void gerarResumoFinanceiro(Consulta[] consultas, int totalConsultas,
                                              Pagamento[] pagamentos, int totalPagamentos,
                                              double[] multas, int totalMultas) {
         int realizadas = 0;
@@ -64,16 +65,18 @@ public class Relatorio {
         double totalEmMultas = 0;
 
         for (int i = 0; i < totalConsultas; i++) {
-            if (consultas[i].status.equals("realizada")) realizadas++;
-            if (consultas[i].status.equals("cancelada")) canceladas++;
+            // AQUI usamos o getter .getStatus()
+            if (consultas[i].getStatus().equals("realizada")) realizadas++;
+            if (consultas[i].getStatus().equals("cancelada")) canceladas++;
         }
 
         for (int i = 0; i < totalPagamentos; i++) {
-            totalFaturado = totalFaturado + pagamentos[i].valorFinal;
+            // AQUI usamos o getter .getValorFinal()
+            totalFaturado += pagamentos[i].getValorFinal();
         }
 
         for (int i = 0; i < totalMultas; i++) {
-            totalEmMultas = totalEmMultas + multas[i];
+            totalEmMultas += multas[i];
         }
 
         System.out.println("\n=== RESUMO FINANCEIRO ===");
@@ -83,17 +86,15 @@ public class Relatorio {
         System.out.println("Total em multas: R$" + Math.round(totalEmMultas * 100.0) / 100.0);
     }
 
-    // busca diagnostico de um atendimento pelo indice da consulta
     public static String buscarDiagnostico(int indiceConsulta, Atendimento[] atendimentos, int total) {
         for (int i = 0; i < total; i++) {
-            if (atendimentos[i].indiceConsulta == indiceConsulta) {
-                return atendimentos[i].diagnostico;
+            if (atendimentos[i].getIndiceConsulta() == indiceConsulta) {
+                return atendimentos[i].getDiagnostico();
             }
         }
         return "";
     }
 
-    // compara datas convertendo pra numero inteiro (AAAAMMDD)
     public static boolean estaNoIntervalo(String data, String inicio, String fim) {
         int valorData = converterDataParaNumero(data);
         int valorInicio = converterDataParaNumero(inicio);
@@ -101,7 +102,6 @@ public class Relatorio {
         return valorData >= valorInicio && valorData <= valorFim;
     }
 
-    // converte DD/MM/AAAA pra um numero tipo 20260519 pra poder comparar
     private static int converterDataParaNumero(String data) {
         int dia = Integer.parseInt(data.substring(0, 2));
         int mes = Integer.parseInt(data.substring(3, 5));
