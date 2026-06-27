@@ -1,18 +1,14 @@
 public class Nutricionista extends Profissional {
-    private String especialidadeDietetica;
+    private String crn;
 
-    public Nutricionista(String nome, String cpf, String telefone, String dataNascimento, 
-                         String registro, double valor, String especialidade) {
-        super(nome, cpf, telefone, dataNascimento, registro, valor);
-        this.especialidadeDietetica = especialidade;
+    public Nutricionista(String nome, String registroProfissional, double valorConsulta, String crn) {
+        // Passa os parâmetros certos para a classe do professor ("nutricao")
+        super(nome, "nutricao", registroProfissional, valorConsulta);
+        this.crn = crn;
     }
 
     @Override
-    public void exibirResumo() {
-        System.out.println("--- Nutricionista ---");
-        System.out.println("Nome: " + getNome());
-        System.out.println("Registro: " + getRegistroProfissional());
-        System.out.println("Especialidade: " + this.especialidadeDietetica);
-        System.out.println("Valor: R$" + getValorConsulta());
+    public String exibirResumo() {
+        return super.exibirResumo() + " | CRN: " + this.crn;
     }
 }
