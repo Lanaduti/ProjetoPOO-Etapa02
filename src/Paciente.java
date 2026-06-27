@@ -1,27 +1,23 @@
-public class Paciente {
-    public String nome;
-    public String cpf;
-    public int idade;
-    public String telefone;
-    public String convenioNome;
-    public boolean ativo;
+public class Paciente extends Pessoa {
+    private int idade;
+    private String convenioNome;
+    private boolean ativo;
 
     public Paciente(String nome, String cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
+        super(nome, cpf); // Chama o construtor da classe Pessoa
         this.idade = 0;
-        this.telefone = "";
+        this.telefone = ""; // Acessível se for protected em Pessoa
         this.convenioNome = "";
         this.ativo = true;
     }
 
-    public Paciente(String nome, String cpf, int idade, String telefone) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
+   public Paciente(String nome, String cpf, int idade, String telefone, String convenioNome) {
+        super(nome, cpf);
         this.telefone = telefone;
-        this.convenioNome = "";
+        this.idade = idade;
+        this.convenioNome = convenioNome;
         this.ativo = true;
+    }
     }
 
     // construtor com todos os dados
