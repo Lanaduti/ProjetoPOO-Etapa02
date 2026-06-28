@@ -3,6 +3,9 @@ import java.util.List;
 
 public class Relatorio {
 
+    // RELATORIO DE CADASTROS (lista unificada de Pessoa).
+    // R5 LIGAÇÃO DINÂMICA: o exibirResumo() executado depende do tipo REAL do objeto.
+    // DYNAMIC CASTING: instanceof + cast para mostrar dados extras de Paciente/Profissional.
     public static void gerarRelatorioPessoas(List<Pessoa> pessoas) {
         System.out.println("\n=== RELATORIO DE CADASTROS ===");
         if (pessoas.isEmpty()) {
@@ -15,6 +18,7 @@ public class Relatorio {
             // LIGAÇÃO DINÂMICA: chama o exibirResumo() do tipo real (Paciente, Fisioterapeuta, ...)
             System.out.println(p.exibirResumo());
 
+            // DYNAMIC CASTING: descobrir o tipo concreto para info adicional
             if (p instanceof Paciente) {
                 qtdPacientes++;
                 Paciente pac = (Paciente) p;
@@ -120,7 +124,7 @@ public class Relatorio {
         else System.out.println("Total em multas: R$ " + arredondar(total));
     }
 
-    // Jornada 26: exporta de forma uniforme todos os objetos Exportavel (consultas, atendimentos, pagamentos).
+    // Jornada 26: exporta de forma UNIFORME todos os objetos Exportavel (consultas, atendimentos, pagamentos).
     public static void exportarDados(List<Consulta> consultas, List<Atendimento> atendimentos,
                                      List<Pagamento> pagamentos) {
         // R7: polimorfismo via interface — uma unica colecao de Exportavel com tipos diferentes.
@@ -131,10 +135,11 @@ public class Relatorio {
         System.out.println("\n=== EXPORTACAO DE DADOS (" + exportaveis.size() + " registros) ===");
         if (exportaveis.isEmpty()) { System.out.println("Nada a exportar."); return; }
         for (Exportavel e : exportaveis) {
-            System.out.println(e.exportarDados()); 
+            System.out.println(e.exportarDados()); // cada tipo fornece sua representacao textual
         }
     }
 
+    // ---- helpers (mantidos da base) ----
     private static void imprimirConsulta(int indice, Consulta c, List<Atendimento> atendimentos) {
         System.out.println("[" + indice + "] " + c.exibirResumo());
         String diag = buscarDiagnostico(indice, atendimentos);
@@ -163,4 +168,3 @@ public class Relatorio {
 
     private static double arredondar(double v) { return Math.round(v * 100.0) / 100.0; }
 }
-
