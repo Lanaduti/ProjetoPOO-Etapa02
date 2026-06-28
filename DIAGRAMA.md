@@ -1,6 +1,6 @@
 # Diagrama de Classes — Clínica VidaPlena (AV2)
 
-Diagrama em Mermaid (renderiza automaticamente no GitHub). Mostra as hierarquias, as interfaces e os relacionamentos (associação, agregação e composição).
+Diagrama em Mermaid. Mostra as hierarquias, as interfaces e os relacionamentos (associação, agregação e composição).
 
 ```mermaid
 classDiagram
