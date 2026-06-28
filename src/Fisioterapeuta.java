@@ -9,9 +9,8 @@ public class Fisioterapeuta extends Profissional {
 
     @Override
     public String exibirResumo() {
-        return "[FISIOTERAPEUTA] " + nome + " | " + descricaoBase()
-             + " | Sessoes previstas: " + totalSessoesPrevistas;
-    }
+       return "[FISIOTERAPEUTA] " + getNome() + " | " + descricaoBase()
+     + " | Sessoes previstas: " + totalSessoesPrevistas;
 
     @Override
     public void registrarEspecifico(Atendimento atendimento) { 
