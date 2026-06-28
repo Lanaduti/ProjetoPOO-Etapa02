@@ -55,7 +55,5 @@ public abstract class Pessoa {
         this.dataNascimento = dataNascimento;
     }
 
-    public abstract void exibirResumo();
-} // Chave que faltava fechar aqui no final!
-
-
+    public abstract String exibirResumo();
+}
