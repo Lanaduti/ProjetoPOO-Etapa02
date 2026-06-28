@@ -1,4 +1,4 @@
-# Clínica VidaPlena — AV2 (Evolução)
+# Clínica VidaPlena — AV2 
 
 Sistema de gestão de uma clínica multidisciplinar, em Java puro (console). É a evolução do projeto base (fork): os arrays fixos deram lugar ao Java Collections Framework e o código foi reestruturado para aplicar encapsulamento, herança, polimorfismo, interfaces, relacionamentos e tratamento de exceções.
 
