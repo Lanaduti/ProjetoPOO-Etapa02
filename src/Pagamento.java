@@ -1,58 +1,71 @@
-public class Pagamento {
-    public int indiceConsulta;
-    public double valorFinal;
-    public String tipoPagamento;
-    public int parcelas;
+public abstract class Pagamento implements Exportavel {
 
-    public Pagamento(int indiceConsulta, double valorFinal, String tipoPagamento) {
-        this.indiceConsulta = indiceConsulta;
-        this.valorFinal = valorFinal;
-        this.tipoPagamento = tipoPagamento;
-        this.parcelas = 1;
-    }
+    protected double valorBase;
+    protected String descricao;
 
-    // com parcelas (so pra cartao)
-    public Pagamento(int indiceConsulta, double valorFinal, String tipoPagamento, int parcelas) {
-        this.indiceConsulta = indiceConsulta;
-        this.valorFinal = valorFinal;
-        this.tipoPagamento = tipoPagamento;
-        this.parcelas = parcelas;
-    }
-
-    // sem desconto nenhum
-    public static double calcularValor(double valorBase) {
-        return valorBase;
-    }
-
-    // com desconto em percentual
-    public static double calcularValor(double valorBase, double percentualDesconto) {
-        double desconto = valorBase * percentualDesconto / 100;
-        double valor = valorBase - desconto;
-        if (valor < 0) {
-            valor = 0;
+    public Pagamento(double valorBase) throws PagamentoInvalidoException {
+        if (valorBase < 0) {
+            throw new PagamentoInvalidoException("Valor do pagamento nao pode ser negativo: " + valorBase);
         }
-        return valor;
+        this.valorBase = valorBase;
+        this.descricao = "Pagamento";
     }
 
-    // com desconto e multa somada
-    public static double calcularValor(double valorBase, double percentualDesconto, double multa) {
-        double desconto = valorBase * percentualDesconto / 100;
-        double valor = valorBase - desconto + multa;
-        if (valor < 0) {
-            valor = 0;
-        }
-        return valor;
-    }
+    // R6/R5: MÉTODO ABSTRATO — cada forma calcula o valor final de um jeito.
+    public abstract double calcularValorFinal();
 
+    // R6: MÉTODO CONCRETO — comum a todos. 
     public String exibirResumo() {
-        // arredonda pra 2 casas
-        double valorArredondado = Math.round(valorFinal * 100.0) / 100.0;
-        String resumo = "Consulta #" + indiceConsulta + " | Valor: R$" + valorArredondado
-                + " | Tipo: " + tipoPagamento + " | Parcelas: " + parcelas;
-        if (parcelas > 1) {
-            double valorParcela = Math.round((valorFinal / parcelas) * 100.0) / 100.0;
-            resumo = resumo + " (R$" + valorParcela + " cada)";
-        }
-        return resumo;
+        double v = Math.round(calcularValorFinal() * 100.0) / 100.0;
+        return "[PAGAMENTO] Tipo: " + descricao
+             + " | Base: R$ " + String.format("%.2f", valorBase)
+             + " | Final: R$ " + v;
     }
+
+    // R7: contrato Exportavel
+    @Override
+    public String exportarDados() {
+        return "PAGAMENTO|tipo=" + descricao
+             + "|base=" + String.format("%.2f", valorBase)
+             + "|final=" + String.format("%.2f", calcularValorFinal());
+    }
+
+    public double getValorBase() { return valorBase; }
+    public String getDescricao() { return descricao; }
 }
+public abstract class Pagamento implements Exportavel {
+
+    protected double valorBase;
+    protected String descricao;
+
+    public Pagamento(double valorBase) throws PagamentoInvalidoException {
+        if (valorBase < 0) {
+            throw new PagamentoInvalidoException("Valor do pagamento nao pode ser negativo: " + valorBase);
+        }
+        this.valorBase = valorBase;
+        this.descricao = "Pagamento";
+    }
+
+    // R6/R5: MÉTODO ABSTRATO — cada forma calcula o valor final de um jeito.
+    public abstract double calcularValorFinal();
+
+    // R6: MÉTODO CONCRETO — comum a todos. 
+    public String exibirResumo() {
+        double v = Math.round(calcularValorFinal() * 100.0) / 100.0;
+        return "[PAGAMENTO] Tipo: " + descricao
+             + " | Base: R$ " + String.format("%.2f", valorBase)
+             + " | Final: R$ " + v;
+    }
+
+    // R7: contrato Exportavel
+    @Override
+    public String exportarDados() {
+        return "PAGAMENTO|tipo=" + descricao
+             + "|base=" + String.format("%.2f", valorBase)
+             + "|final=" + String.format("%.2f", calcularValorFinal());
+    }
+
+    public double getValorBase() { return valorBase; }
+    public String getDescricao() { return descricao; }
+}
+
