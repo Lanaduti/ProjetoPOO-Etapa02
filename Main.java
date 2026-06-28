@@ -1,10 +1,5 @@
 import java.util.Scanner;
 
-import colecoes.Consulta;
-import colecoes.Paciente;
-import colecoes.Profissional;
-import exceptions.PacienteNaoEncontradoException;
-
 public class Main {
     static Paciente[] pacientes = new Paciente[100];
     static int totalPacientes = 0;
@@ -73,7 +68,7 @@ public class Main {
                 case 1: cadastrarPaciente(); break;
                 case 2: complementarPaciente(); break;
                 case 3: buscarPaciente(); break;
-                case 4: menuPacientes(); break;
+                case 4: listarPacientes(); break;
                 case 5: desativarPaciente(); break;
                 case 0: break;
                 default: System.out.println("Opcao invalida!"); break;
@@ -83,34 +78,39 @@ public class Main {
 
     public static void cadastrarPaciente() {
         System.out.print("Nome: ");
-    String nome = sc.nextLine();
+        String nome = sc.nextLine();
+        System.out.print("CPF: ");
+        String cpf = sc.nextLine();
 
-    System.out.print("CPF: ");
-    String cpf = sc.nextLine();
+        // verifica se ja existe
+        if (buscarIndicePaciente(cpf) != -1) {
+            System.out.println("CPF ja cadastrado!");
+            return;
+        }
 
-    if (buscarIndicePaciente(cpf) != -1) {
+        System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
+        int tipo = Integer.parseInt(sc.nextLine());
 
-        System.out.println(
-                "CPF ja cadastrado!"
-        );
-
-        return;
-
+        if (tipo == 1) {
+            pacientes[totalPacientes] = new Paciente(nome, cpf);
+        } else if (tipo == 2) {
+            System.out.print("Idade: ");
+            int idade = Integer.parseInt(sc.nextLine());
+            System.out.print("Telefone: ");
+            String tel = sc.nextLine();
+            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel);
+        } else {
+            System.out.print("Idade: ");
+            int idade = Integer.parseInt(sc.nextLine());
+            System.out.print("Telefone: ");
+            String tel = sc.nextLine();
+            System.out.print("Convenio: ");
+            String conv = sc.nextLine();
+            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel, conv);
+        }
+        totalPacientes++;
+        System.out.println("Paciente cadastrado com sucesso!");
     }
-
-    pacientes[totalPacientes] =
-            new Paciente(
-                    nome,
-                    cpf
-            );
-
-    totalPacientes++;
-
-    System.out.println(
-            "Paciente cadastrado!"
-    );
-
-}
 
     public static void complementarPaciente() {
         System.out.print("CPF: ");
@@ -139,44 +139,26 @@ public class Main {
         System.out.println("Cadastro atualizado!");
     }
 
-    
-    public static void buscarPaciente(){
-
-    try{System.out.print("CPF: ");
-    
-    String cpf =
-    sc.nextLine();
-
-    int idx =
-    buscarIndicePaciente(cpf);
-
-    if(idx==-1){
-    throw new
-    PacienteNaoEncontradoException();
+    public static void buscarPaciente() {
+        System.out.print("CPF: ");
+        String cpf = sc.nextLine();
+        int idx = buscarIndicePaciente(cpf);
+        if (idx == -1) {
+            System.out.println("Paciente nao encontrado.");
+        } else {
+            System.out.println(pacientes[idx].exibirResumo());
+        }
     }
 
-    System.out.println(pacientes[idx].exibirResumo()
-    );
-
+    public static void listarPacientes() {
+        if (totalPacientes == 0) {
+            System.out.println("Nenhum paciente cadastrado.");
+            return;
+        }
+        for (int i = 0; i < totalPacientes; i++) {
+            System.out.println(pacientes[i].exibirResumo());
+        }
     }
-
-    catch(
-    PacienteNaoEncontradoException e
-    ){
-
-    System.out.println(
-    e.getMessage()
-    );
-
-    }
-
-    }
-
-    
-    
-    
-
-    
 
     public static void desativarPaciente() {
         System.out.print("CPF: ");
@@ -361,16 +343,10 @@ public class Main {
             System.out.println("Paciente nao encontrado.");
             return;
         }
-        
-        if(!pacientes[idxPac].isAtivo()){
-
-        System.out.println(
-        "Paciente inativo."
-        );
-        return;
+       if (!pacientes[idxPac].isAtivo()) {
+            System.out.println("Paciente inativo. Nao e possivel agendar.");
+            return;
         }
-
-        
 
         System.out.print("Nome do profissional: ");
         String nomeProf = sc.nextLine();
@@ -436,15 +412,10 @@ public class Main {
             System.out.println("Paciente nao encontrado.");
             return;
         }
-        if(!pacientes[idxPac].isAtivo()){
-
-        System.out.println(
-        "Paciente inativo."
-        );
-
-        return;
-
-}
+        if (!pacientes[idxPac].isAtivo())
+            System.out.println("Paciente inativo. Nao e possivel agendar.");
+            return;
+        }
 
         System.out.print("Especialidade: ");
         String esp = sc.nextLine();
@@ -461,8 +432,7 @@ public class Main {
            if (profissionais[i].getEspecialidade().equals(esp)
                     && profissionais[i].getValorConsulta() > 0
                     && profissionais[i].atendeNoDia(diaSemana)
-                    && !temConflito(
-                        profissionais[i].getNome(), data, horario)){
+                    && !temConflito(profissionais[i].getNome(), data, horario) {
                 idxProf = i;
                 break;
             }
