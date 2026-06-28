@@ -1,5 +1,5 @@
 public class ClinicoGeral extends Profissional {
-    private String encaminhamento; // R3: atributo próprio
+    private String encaminhamento; 
 
     public ClinicoGeral(String nome, String cpf, String telefone, String dataNascimento,
                         String registroProfissional, double valorConsulta, String encaminhamento) {
@@ -8,13 +8,13 @@ public class ClinicoGeral extends Profissional {
     }
 
     @Override
-    public String exibirResumo() { // SOBRESCRITA
+    public String exibirResumo() { 
         return "[CLINICO GERAL] " + nome + " | " + descricaoBase()
              + " | Encaminhamento: " + (encaminhamento == null || encaminhamento.isEmpty() ? "Nenhum" : encaminhamento);
     }
 
     @Override
-    public void registrarEspecifico(Atendimento atendimento) { // SOBRESCRITA
+    public void registrarEspecifico(Atendimento atendimento) { 
         atendimento.adicionarObservacao("Clinica geral: encaminhamento -> "
             + (encaminhamento == null || encaminhamento.isEmpty() ? "nenhum" : encaminhamento));
     }
