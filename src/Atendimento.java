@@ -1,74 +1,85 @@
-public class Atendimento {
-    public int indiceConsulta;
-    public String observacoes;
-    public String diagnostico;
-    public String[] procedimentos;
-    public int totalProcedimentos;
+import java.util.List;
 
-    // registro basico - so observacoes
-    public Atendimento(int indiceConsulta, String observacoes) {
+// R7: implementa Exportavel
+public class Atendimento implements Exportavel {
+
+    private int indiceConsulta; 
+
+    // R8 COMPOSIÇÃO: 
+    private Prontuario prontuario;
+
+    // R4: SOBRECARGA DE CONSTRUTORES 
+    public Atendimento(int indiceConsulta, String data, String observacoes) {
         this.indiceConsulta = indiceConsulta;
-        this.observacoes = observacoes;
-        this.diagnostico = "";
-        this.procedimentos = new String[10];
-        this.totalProcedimentos = 0;
+        this.prontuario = new Prontuario(data); 
+        prontuario.setObservacoes(observacoes);
     }
-
-    public Atendimento(int indiceConsulta, String observacoes, String diagnostico) {
-        this.indiceConsulta = indiceConsulta;
-        this.observacoes = observacoes;
-        this.diagnostico = diagnostico;
-        this.procedimentos = new String[10];
-        this.totalProcedimentos = 0;
+    public Atendimento(int indiceConsulta, String data, String observacoes, String diagnostico) {
+        this(indiceConsulta, data, observacoes);
+        prontuario.setDiagnostico(diagnostico);
     }
-
-    // registro completo com procedimentos ja definidos
-    public Atendimento(int indiceConsulta, String observacoes, String diagnostico,
-                       String[] procedimentos, int totalProcedimentos) {
-        this.indiceConsulta = indiceConsulta;
-        this.observacoes = observacoes;
-        this.diagnostico = diagnostico;
-        this.procedimentos = new String[10];
-        this.totalProcedimentos = totalProcedimentos;
-        for (int i = 0; i < totalProcedimentos; i++) {
-            this.procedimentos[i] = procedimentos[i];
+    public Atendimento(int indiceConsulta, String data, String observacoes, String diagnostico, String[] procedimentos) {
+        this(indiceConsulta, data, observacoes, diagnostico);
+        for (String p : procedimentos) {
+            if (p != null && !p.isEmpty()) prontuario.adicionarProcedimento(p);
         }
     }
 
-    // adiciona um por vez
+    // R4: SOBRECARGA DE MÉTODOS 
     public void adicionarProcedimento(String procedimento) {
-        if (totalProcedimentos < 10) {
-            procedimentos[totalProcedimentos] = procedimento;
-            totalProcedimentos++;
-        }
+        prontuario.adicionarProcedimento(procedimento);
     }
-
-    // adiciona varios de uma vez
     public void adicionarProcedimento(String[] procs, int quantidade) {
         for (int i = 0; i < quantidade; i++) {
-            if (totalProcedimentos < 10) {
-                procedimentos[totalProcedimentos] = procs[i];
-                totalProcedimentos++;
-            }
+            if (procs[i] != null && !procs[i].isEmpty()) prontuario.adicionarProcedimento(procs[i]);
         }
+    }
+
+   
+    public void adicionarObservacao(String texto) {
+        String atual = prontuario.getObservacoes();
+        prontuario.setObservacoes((atual == null || atual.isEmpty()) ? texto : atual + " | " + texto);
     }
 
     public String exibirResumo() {
-        String resumo = "Observacoes: " + observacoes;
-
-        if (!diagnostico.equals("")) {
-            resumo = resumo + "\nDiagnostico: " + diagnostico;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Observacoes: ").append(prontuario.getObservacoes());
+        if (!prontuario.getDiagnostico().isEmpty()) {
+            sb.append("\nDiagnostico: ").append(prontuario.getDiagnostico());
         }
-
-        if (totalProcedimentos > 0) {
-            resumo = resumo + "\nProcedimentos: ";
-            for (int i = 0; i < totalProcedimentos; i++) {
-                resumo = resumo + procedimentos[i];
-                if (i < totalProcedimentos - 1) {
-                    resumo = resumo + ", ";
-                }
+        List<String> procs = prontuario.getProcedimentos();
+        if (!procs.isEmpty()) {
+            sb.append("\nProcedimentos: ");
+            for (int i = 0; i < procs.size(); i++) {
+                sb.append(procs.get(i));
+                if (i < procs.size() - 1) sb.append(", ");
             }
         }
-        return resumo;
+        return sb.toString();
     }
+
+    // R7: contrato Exportavel
+    @Override
+    public String exportarDados() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ATENDIMENTO|consulta=").append(indiceConsulta)
+          .append("|data=").append(prontuario.getData())
+          .append("|obs=").append(prontuario.getObservacoes())
+          .append("|diag=").append(prontuario.getDiagnostico().isEmpty() ? "-" : prontuario.getDiagnostico())
+          .append("|procedimentos=");
+        List<String> procs = prontuario.getProcedimentos();
+        if (procs.isEmpty()) {
+            sb.append("-");
+        } else {
+            for (int i = 0; i < procs.size(); i++) {
+                sb.append(procs.get(i));
+                if (i < procs.size() - 1) sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+    public Prontuario getProntuario() { return prontuario; }
+    public int getIndiceConsulta() { return indiceConsulta; }
+    public String getDiagnostico() { return prontuario.getDiagnostico(); } // usado pelo Relatorio
 }
