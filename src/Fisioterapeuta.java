@@ -12,6 +12,8 @@ public class Fisioterapeuta extends Profissional {
        return "[FISIOTERAPEUTA] " + getNome() + " | " + descricaoBase()
      + " | Sessoes previstas: " + totalSessoesPrevistas;
 
+    }
+
     @Override
     public void registrarEspecifico(Atendimento atendimento) { 
         atendimento.adicionarObservacao("Fisioterapia: plano de " + totalSessoesPrevistas + " sessoes.");
@@ -29,3 +31,7 @@ public class Fisioterapeuta extends Profissional {
         this.totalSessoesPrevistas = totalSessoesPrevistas;
     }
 }
+
+
+
+
